@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>GMB Rep Portal</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#f4f4f4}
+header{background:#d71920;color:#fff;padding:20px;text-align:center}
+nav{padding:10px;text-align:center;background:#333;color:#fff}
+.container{max-width:1000px;margin:auto;padding:20px}
+.card{background:#fff;padding:15px;border-radius:8px;margin:10px 0;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+button{background:#d71920;color:#fff;border:none;padding:10px 15px;border-radius:5px;cursor:pointer}
+input,textarea{width:100%;padding:8px;margin:5px 0}
+#portal{display:none}
+</style>
+</head>
+<body>
+<header><h1>GMB NHS Rep Companion</h1></header>
+<nav>Public Website & Rep Portal</nav>
+<div class='container'>
+<div id='public'>
+<div class='card'><h2>Welcome</h2><p>Supporting NHS staff across Lincolnshire.</p><button onclick="alert('Join form coming soon')">Join GMB</button></div>
+<div class='card'><h2>Know Your Rights</h2><ul><li>Grievances</li><li>Disciplinary Meetings</li><li>Sickness Absence</li><li>Health & Safety</li></ul></div>
+<div class='card'><h2>Representative Login</h2>
+<input id='user' placeholder='Username'>
+<input id='pass' type='password' placeholder='Password'>
+<button onclick='login()'>Login</button>
+<p><small>Demo login: rep / gmb123</small></p>
+</div></div>
+
+<div id='portal'>
+<div class='card'><h2>Rep Dashboard</h2><p>Members: <span id='memberCount'>0</span></p><p>Cases: <span id='caseCount'>0</span></p></div>
+<div class='card'><h2>Add Member</h2><input id='memberName' placeholder='Member Name'><button onclick='addMember()'>Save Member</button><div id='members'></div></div>
+<div class='card'><h2>Add Case</h2><input id='caseName' placeholder='Member Name'><textarea id='caseNotes' placeholder='Case Notes'></textarea><button onclick='addCase()'>Save Case</button><div id='cases'></div></div>
+<button onclick='logout()'>Logout</button>
+</div>
+</div>
+<script>
+let members=JSON.parse(localStorage.getItem('members')||'[]');
+let cases=JSON.parse(localStorage.getItem('cases')||'[]');
+function login(){if(user.value==='rep'&&pass.value==='gmb123'){public.style.display='none';portal.style.display='block';render();}else alert('Invalid login');}
+function logout(){portal.style.display='none';public.style.display='block';}
+function save(){localStorage.setItem('members',JSON.stringify(members));localStorage.setItem('cases',JSON.stringify(cases));}
+function addMember(){members.push(memberName.value);save();render();memberName.value='';}
+function addCase(){cases.push({name:caseName.value,notes:caseNotes.value});save();render();caseName.value='';caseNotes.value='';}
+function render(){memberCount.textContent=members.length;caseCount.textContent=cases.length;members.innerHTML=members.map(m=>'<p>👤 '+m+'</p>').join('');cases.innerHTML=cases.map(c=>'<p><b>'+c.name+'</b><br>'+c.notes+'</p>').join('');}
+</script>
+</body>
+</html>
